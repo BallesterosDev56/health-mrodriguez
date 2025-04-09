@@ -31,21 +31,35 @@ function App() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Datos comunes para ambos correos
+    const templateParams = {
+      from_name: formData.fullName,
+      to_name: formData.fullName,
+      email: formData.email,
+      reply_to: formData.email,
+      user_country: formData.country,
+      user_city: formData.city,
+      user_phone: formData.phone
+    };
+    
     try {
+      // Enviar correo de notificación a Mariana
       await emailjs.send(
         'service_doh9953',  // Tu Service ID
-        'template_8yzw22u', // Tu Template ID
-        {
-          from_name: formData.fullName,
-          to_name: formData.fullName,
-          email: formData.email,
-          reply_to: formData.email,
-          user_country: formData.country,
-          user_city: formData.city,
-          user_phone: formData.phone
-        },
+        'template_on2n2yq',  // ID de la plantilla para Mariana (reemplaza con el ID real)
+        templateParams,
         '2Za3Tw-f8rG6AGc3m' // Tu Public Key
       );
+      
+      // Enviar correo de confirmación al cliente
+      await emailjs.send(
+        'service_doh9953',  // Tu Service ID
+        'template_r0kj0ah',  // ID de la plantilla para el cliente (reemplaza con el ID real)
+        templateParams,
+        '2Za3Tw-f8rG6AGc3m' // Tu Public Key
+      );
+      
       setIsSubmitted(true);
       setFormData({
         fullName: '',
